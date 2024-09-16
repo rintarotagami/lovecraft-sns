@@ -21,11 +21,7 @@
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
       "@/assets/*": ["./public/assets/*"],
-<<<<<<< HEAD
-      "@/auth": ["src/auth.ts"]
-=======
-      "@/auth": ["src/auth.ts"]
->>>>>>> 7311f386f6db3c2c9a85e58062cdc5c86c944ef2
+      "@/auth": ["./src/auth.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/FormError"],
