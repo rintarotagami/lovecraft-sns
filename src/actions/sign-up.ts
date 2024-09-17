@@ -1,13 +1,14 @@
 'use server';
 
 import { signUpSchema } from '@/schemas';
-import { ActionsResult } from '@/types/ActionResult';
+import { ActionsResult } from '@/types/ActionsResult';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { getUserByEmail } from '@/db/user';
-import { db } from '@/firebaseConfig';
+import { db } from '@/lib/db';
 import { handleError } from '@/lib/utils';
-import { collection, addDoc } from 'firebase/firestore';
+import { generateVerificationToken } from '@/lib/tokens';
+import { sendVerificationEmail } from '@/lib/mail';
 
 export const signUp = async (
     values: z.infer<typeof signUpSchema>
@@ -39,17 +40,29 @@ export const signUp = async (
             };
         }
 
-        await addDoc(collection(db, 'users'), {
-            name: nickname,
-            email,
-            password: hashedPassword,
+        await db.user.create({
+            data: {
+                name: nickname,
+                email,
+                password: hashedPassword,
+            },
         });
+
+        const verificationToken = await generateVerificationToken(email);
+        console.log("Verification token generated:", verificationToken);
+
+        await sendVerificationEmail(
+            verificationToken.email,
+            verificationToken.token
+        );
+        console.log("Verification email sent");
 
         return {
             isSuccess: true,
-            message: 'サインアップに成功しました。',
+            message: '確認メールを送信しました。',
         };
     } catch (error) {
+        console.error("Error in signUp:", error);
         handleError(error);
 
         return {

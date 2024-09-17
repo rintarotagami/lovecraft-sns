@@ -1,13 +1,10 @@
- // Start of Selection
-import { db } from '@/firebaseConfig';
-import { collection, getDoc, doc, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/db';
 
 export const getUserByEmail = async (email: string) => {
     try {
-        const q = query(collection(db, 'users'), where('email', '==', email));
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) return null;
-        return querySnapshot.docs[0].data();
+        const user = await db.user.findUnique({ where: { email } });
+
+        return user;
     } catch {
         return null;
     }
@@ -15,9 +12,9 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserById = async (id: string) => {
     try {
-        const userDoc = await getDoc(doc(db, 'users', id));
-        if (!userDoc.exists()) return null;
-        return userDoc.data();
+        const user = await db.user.findUnique({ where: { id } });
+
+        return user;
     } catch (e) {
         return null;
     }

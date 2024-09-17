@@ -57,7 +57,7 @@ export function SignUpForm() {
                         <FormItem>
                             <FormLabel>ニックネーム</FormLabel>
                             <FormControl>
-                                <Input placeholder='ニックネームを入力' {...field} />
+                                <Input placeholder='ニックネームを入力してください' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -70,7 +70,7 @@ export function SignUpForm() {
                         <FormItem>
                             <FormLabel>メールアドレス</FormLabel>
                             <FormControl>
-                                <Input placeholder='example@example.com' {...field} />
+                                <Input placeholder='test@example.com' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -83,7 +83,7 @@ export function SignUpForm() {
                         <FormItem>
                             <FormLabel>パスワード</FormLabel>
                             <FormControl>
-                                <Input placeholder='パスワードを入力' {...field} />
+                                <Input placeholder='英大文字小文字＋数字 10桁以上' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

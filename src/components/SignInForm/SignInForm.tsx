@@ -18,10 +18,18 @@ import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { signInSchema } from '@/schemas/index';
 import { signIn } from '@/actions/sign-in';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export function SignInForm() {
     const [error, setError] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
+
+    const searchParams = useSearchParams();
+    const urlError =
+        searchParams.get('error') === 'OAuthAccountNotLinked'
+            ? 'このメールアドレスは既に別のプロバイダーで登録されています。'
+            : '';
 
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
@@ -71,11 +79,19 @@ export function SignInForm() {
                             <FormControl>
                                 <Input placeholder='1234567' {...field} />
                             </FormControl>
+                            <Button
+                                size='sm'
+                                variant='link'
+                                asChild
+                                className='px-0 font-normal'
+                            >
+                                <Link href='/reset-password'>パスワードをお忘れですか？</Link>
+                            </Button>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormError message={error} />
+                <FormError message={error || urlError} />
                 <Button type='submit' disabled={isPending}>
                     ログイン
                 </Button>
