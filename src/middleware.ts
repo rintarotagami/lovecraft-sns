@@ -17,20 +17,23 @@ export default auth((req, ctx) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    //1.isApiAuthRouteの場合、何もせずに次の処理へ。
     if (isApiAuthRoute) {
-        return undefined; // nullからundefinedに変更
+        return undefined; 
     }
+    //2.isAuthRouteの場合、ログイン済みならリダイレクト、未ログインなら何もせず次の処理へ。
     if (isAuthRoute) {
         if (isLoggedIn) {
             return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
-        return undefined; // nullからundefinedに変更
+        return undefined; 
     }
+    //3.. ログインしていないかつ公開ルートでない場合、/sign-inにリダイレクト。
     if (!isLoggedIn && !isPublicRoute) {
-        return Response.redirect(new URL('/sign-up', nextUrl));
+        return Response.redirect(new URL('/sign-in', nextUrl));
     }
 
-    return undefined; // nullからundefinedに変更
+    return undefined; 
 });
 
 export const config = {

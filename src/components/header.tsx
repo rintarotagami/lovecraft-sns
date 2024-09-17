@@ -2,6 +2,7 @@ import React from "react";
 import LoveCraft_logo from "@/assets/img/LoveCraft_logo.png";
 import Image from "next/image";
 import Link from "next/link";
+import EditProfileSheet from "./EditProfileSheet/EditProfileSheet";
 
 const Header: React.FC = () => {
     return (
@@ -33,6 +34,7 @@ const Header: React.FC = () => {
                         ログイン
                     </Link>
                 </div>
+                <EditProfileSheet />
             </nav>
         </header>
     );

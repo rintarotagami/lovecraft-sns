@@ -1,3 +1,4 @@
+import { UserRole } from '@prisma/client';
 import * as z from 'zod';
 
 export const signUpSchema = z.object({
@@ -27,11 +28,12 @@ export const signInSchema = z.object({
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,}$/, {
             message: 'パスワードは英大文字、小文字、数字を含む10文字以上でなければなりません。',
         }),
+    code: z.optional(z.string()),
 });
 
 export const resetSchema = z.object({
     email: z.string().email({
-        message: 'メールアドレスは必須です。',
+        message: 'resetSchema',
     }),
 });
 
@@ -43,4 +45,16 @@ export const newPasswordSchema = z.object({
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,}$/, {
             message: 'パスワードは英大文字、小文字、数字を含む10文字以上でなければなりません。',
         }),
+});
+
+
+export const editProfileSchema = z.object({
+    name: z.string().min(1, {
+        message: 'ニックネームは必須です。',
+    }),
+    isTwoFactorEnabled: z.optional(z.boolean()),
+    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(6)),
+    newPassword: z.optional(z.string().min(6)),
 });

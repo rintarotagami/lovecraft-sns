@@ -13,8 +13,9 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { signUpSchema } from '@/schemas';
 import { FormError } from '@/components/FormError/FormError';
+
+import { signUpSchema } from '@/schemas';
 import { useState, useTransition } from 'react';
 import { signUp } from '@/actions/sign-up';
 import { toast } from 'sonner';
