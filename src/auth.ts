@@ -15,6 +15,7 @@ export const {
 } = NextAuth({
     pages: {
         signIn: '/sign-in',
+
     },
     events: {
         async linkAccount({ user }) {
@@ -26,13 +27,13 @@ export const {
     },
     callbacks: {
         async signIn({ user, account }) {
-            // Allow OAuth without email verification
+            // OAuthの場合、メール認証なしでログインを許可する
             if (account?.provider !== 'credentials') return true;
 
             if (!user.id) return false;
             const existingUser = await getUserById(user.id);
 
-            // Prevent sign in without email verification
+            // メール認証なしでのサインインを防止する
             if (!existingUser?.emailVerified) return false;
 
             // TODO: OTP認証を実装する
@@ -48,26 +49,32 @@ export const {
                 });
             }
 
-            // Prevent sign in without email verification
+            // メール認証なしでのサインインを防止する
             if (!existingUser?.emailVerified) return false;
 
             return true;
         },
         async session({ token, session }) {
+            // トークンとセッションの情報を同期させる
             if (token.sub && session.user) {
+                // ーザーIDをトークンのsubフィールドから設定
                 session.user.id = token.sub;
             }
             if (session.user) {
+                // ユーザー名、メールアドレス、OAuth認証の有無を設定
                 session.user.name = token.name ?? '';
                 session.user.email = token.email ?? '';
                 session.user.isOAuth = token.isOAuth as boolean;
             }
             if (token.role && session.user) {
+                // ユーザーロールを設定
                 session.user.role = token.role as UserRole;
             }
             if (session.user) {
+                // 二段階認証の有効/無効状態を設定
                 session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
             }
+            // 更新されたセッション情報を返す
             return session;
         },
         async jwt({ token }) {
