@@ -2,7 +2,7 @@ import React from 'react';
 import { SignUpForm } from '@/components/SignUpForm/SignUpForm';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { SignUpSocialButtons } from '@/components/SocialButtons/SignUpSocialButton';
+import { SocialButtons } from '@/components/SocialButtons/SocialButtons';
 
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ function SignUpPage() {
         <div>
             <SignUpForm />
             <Separator className='my-4' />
-            <SignUpSocialButtons />
+            <SocialButtons />
             <Link
                 className={buttonVariants({
                     variant: 'link',
