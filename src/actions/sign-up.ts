@@ -1,6 +1,6 @@
 'use server';
 
-import { signUpSchema } from '@/schemas';
+import { signUpSchema } from '@/zod-schemas';
 import { ActionsResult } from '@/types/ActionsResult';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
@@ -9,6 +9,7 @@ import { db } from '@/lib/db';
 import { handleError } from '@/lib/utils';
 import { generateVerificationToken } from '@/lib/tokens';
 import { sendVerificationEmail } from '@/lib/mail';
+import { ulid } from 'ulid';
 
 export const signUp = async (
     values: z.infer<typeof signUpSchema>
@@ -28,7 +29,6 @@ export const signUp = async (
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-
         const existingUser = await getUserByEmail(email);
 
         if (existingUser) {
@@ -40,12 +40,24 @@ export const signUp = async (
             };
         }
 
-        await db.user.create({
+        const hashedName = ulid();
+        // ユーザーを作成
+        //newUserはawait db.user.createの結果を受け取る
+        const newUser = await db.user.create({
             data: {
                 name: nickname,
                 email,
                 password: hashedPassword,
+                searchedName: {
+                    create: {
+                        searchedName: hashedName,
+                    },
+                }
             },
+            include: {
+                searchedName: true,
+            },
+            
         });
 
         const verificationToken = await generateVerificationToken(email);

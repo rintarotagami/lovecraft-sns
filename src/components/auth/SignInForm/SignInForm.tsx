@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { FormError } from '@/components/FormError/FormError';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
-import { signInSchema } from '@/schemas/index';
+import { signInSchema } from '@/zod-schemas/index';
 import { signIn } from '@/actions/sign-in';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';

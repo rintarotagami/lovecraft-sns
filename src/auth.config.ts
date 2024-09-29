@@ -5,7 +5,7 @@ import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import Twitter from 'next-auth/providers/twitter';
 
-import { signInSchema } from './schemas';
+import { signInSchema } from './zod-schemas';
 import { getUserByEmail } from './db/user';
 
 export default {

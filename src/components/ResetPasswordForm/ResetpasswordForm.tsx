@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { resetSchema } from '@/schemas';
+import { resetSchema } from '@/zod-schemas';
 import { Input } from '@/components/ui/input';
 import {
     Form,

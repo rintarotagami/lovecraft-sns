@@ -1,0 +1,56 @@
+model ScenarioSummary {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  overview           String
+  introduction       String?
+  tags               String[]
+  isGMless           Boolean @default(false)
+  expectedPlayers    Int
+  expectedPlayTime   String
+  imageNames         String[]
+  authors            AuthorScenario[] 
+  gameSessions       GameSessionSummary[] @relation
+  scenarioDetail     ScenarioDetail? @relation(fields: [scenarioDetailId], references: [id])
+  scenarioDetailId   String? @unique @db.ObjectId
+}
+
+model ScenarioDetail {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  description        String?
+  contents           String
+  url                String?
+  precaution         String?
+  prohibition        String?
+  termsOfUse         String
+  commercialUse      String
+  updateHistory      UpdateHistory[] 
+  scenarioSummary    ScenarioSummary? @relation
+  videoUrls          String[]
+}
+
+model UpdateHistory {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  date               DateTime
+  content            String
+  scenarioDetailId   String @db.ObjectId
+  scenarioDetail     ScenarioDetail @relation(fields: [scenarioDetailId], references: [id])
+}
+
+model Author {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  role               String
+  name               String?
+  userId             String? @db.ObjectId
+  user               User? @relation(fields: [userId], references: [id])
+  description        String?
+  scenario           AuthorScenario[]
+}
+
+model AuthorScenario {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  authorId           String @db.ObjectId
+  scenarioId         String @db.ObjectId
+  author             Author @relation(fields: [authorId], references: [id])
+  scenario           ScenarioSummary @relation(fields: [scenarioId], references: [id])
+  @@unique([authorId, scenarioId])
+}

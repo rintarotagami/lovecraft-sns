@@ -15,14 +15,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { FormError } from '@/components/FormError/FormError';
 
-import { signUpSchema } from '@/schemas';
+import { signUpSchema } from '@/zod-schemas';
 import { useState, useTransition } from 'react';
 import { signUp } from '@/actions/sign-up';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation'; 
 
 export function SignUpForm() {
     const [error, setError] = useState<string | undefined>('');
     const [isPending, startTransition] = useTransition();
+    const router = useRouter(); 
 
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -44,7 +45,7 @@ export function SignUpForm() {
                 return;
             }
 
-            toast.success(result.message);
+            router.push(`/sign-up/EmailSentSuccess?email=${values.email}`); 
         });
     };
 

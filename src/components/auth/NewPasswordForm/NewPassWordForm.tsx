@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/FormError/FormError';
 import { FormSuccess } from '@/components/FormSuccess/FormSuccess';
-import { newPasswordSchema } from '@/schemas/index';
+import { newPasswordSchema } from '@/zod-schemas/index';
 import { newPassword } from '@/actions/new-password';
 import { toast } from 'sonner';
 

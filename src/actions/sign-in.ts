@@ -4,7 +4,7 @@ import * as z from 'zod';
 
 import { signIn as signInByAuthJS } from '@/auth';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
-import { signInSchema } from '@/schemas';
+import { signInSchema } from '@/zod-schemas';
 import { getUserByEmail } from '@/db/user';
 import { ActionsResultWithData } from '@/types/ActionsResult';
 import { AuthError } from 'next-auth';

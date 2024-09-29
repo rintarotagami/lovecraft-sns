@@ -1,8 +1,8 @@
 import React from 'react';
-import { SignUpForm } from '@/components/SignUpForm/SignUpForm';
+import { SignUpForm } from '@/components/auth/SignUpForm/SignUpForm';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { SocialButtons } from '@/components/SocialButtons/SocialButtons';
+import { SocialButtons } from '@/components/auth/SocialButtons/SocialButtons';
 
 import Link from 'next/link';
 

@@ -48,13 +48,25 @@ export const newPasswordSchema = z.object({
 });
 
 
+
 export const editProfileSchema = z.object({
     name: z.string().min(1, {
         message: 'ニックネームは必須です。',
     }),
     isTwoFactorEnabled: z.optional(z.boolean()),
-    role: z.enum([UserRole.ADMIN, UserRole.USER]),
-    email: z.optional(z.string().email()),
+    email: z.optional(z.string().email({
+        message: '有効なメールアドレスを入力してください。',
+    })),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),
+    searchedName:z.string()
+    .min(5,{
+        message:'ユーザーIDは5文字以上でなければなりません。',
+    })
+    .max(15,{
+        message:'ユーザーIDは15文字以内でなければなりません。',
+    })
+    .regex(/^[a-zA-Z0-9_]+$/,{
+        message:'ユーザーIDは英数字と_のみ使用できます。',
+    })
 });

@@ -11,6 +11,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 enum UserRole {
@@ -29,6 +30,20 @@ model User {
   isTwoFactorEnabled Boolean @default(true)
   twoFactorConfirmation TwoFactorConfirmation?
   accounts Account[]
+  gameSessionSummariesGM GameSessionSummaryGM[]
+  gameSessionSummariesApplicant GameSessionSummaryApplicant[]
+  gameSessionDetailPlayers GameSessionDetailPlayer[]
+  gameSessionDetailSpectators GameSessionDetailSpectator[]
+  authors            Author[]
+  searchedName     SearchedName? @relation
+}
+
+model SearchedName {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  searchedName String @unique
+  userId String @unique @db.ObjectId
+  user     User @relation(fields: [userId], references: [id])
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -78,3 +93,4 @@ model TwoFactorConfirmation {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId])
 }
+

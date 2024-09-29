@@ -1,8 +1,8 @@
 import React from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import { SignInForm } from '@/components/SignInForm/SignInForm';
-import { SocialButtons } from '@/components/SocialButtons/SocialButtons';
+import { SignInForm } from '@/components/auth/SignInForm/SignInForm';
+import { SocialButtons } from '@/components/auth/SocialButtons/SocialButtons';
 import { Separator } from '@/components/ui/separator';
 
 function SignInPage() {

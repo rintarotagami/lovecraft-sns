@@ -37,3 +37,6 @@ next-env.d.ts
 
 # env files
 .env
+
+# gsc サービスアカウントキー
+lovecraft-sns-eb46f81f67fd.json
