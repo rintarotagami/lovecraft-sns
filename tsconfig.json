@@ -24,6 +24,6 @@
       "@/auth": ["./src/auth.ts"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/FormError", "src/components/SocialButtons"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/FormError", "src/components/auth/SocialButtons"],
   "exclude": ["node_modules"]
 }

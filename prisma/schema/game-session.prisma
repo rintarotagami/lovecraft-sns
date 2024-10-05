@@ -1,0 +1,68 @@
+model GameSession {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  playDate           String
+  startTime          String
+  qualification      Qualification @default(ANYONE)
+  scenarioId         String   @db.ObjectId
+  scenario           ScenarioSummary @relation(fields: [scenarioId], references: [id])
+  gms                GameSessionGM[] @relation("SessionGM")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  description        String
+  isMobileCompatible Boolean  @default(false)
+  isSpectator        SpectatorType @default(NONE)
+  players            GameSessionPlayer[] 
+  spectators         GameSessionSpectator[]
+  maxPlayers         Int
+  currentPlayers     Int @default(0)
+  isRecruiting       Boolean @default(true)
+}
+
+model GameSessionGM {
+  id                   String @id @default(auto()) @map("_id") @db.ObjectId
+  gameSessionId String? @db.ObjectId
+  userId               String? @db.ObjectId
+  gameSession   GameSession? @relation("SessionGM", fields: [gameSessionId], references: [id], onDelete: SetNull)
+  user                 User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@unique([gameSessionId, userId])
+}
+
+model GameSessionPlayer {
+  id                   String @id @default(auto()) @map("_id") @db.ObjectId
+  gameSessionId String? @db.ObjectId
+  userId              String? @db.ObjectId
+  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
+  user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@unique([gameSessionId, userId])
+}
+
+model GameSessionSpectator {
+  id                   String @id @default(auto()) @map("_id") @db.ObjectId
+  gameSessionId String? @db.ObjectId
+  userId              String? @db.ObjectId
+  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
+  user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@unique([gameSessionId, userId])
+}
+
+enum CommunicationType {
+  CHAT
+  VC
+  IN_PERSON
+}
+
+enum Qualification {
+  ANYONE
+  MUTUAL_FOLLOW
+  COMMUNITY_MEMBER
+}
+
+enum SpectatorType {
+  NONE
+  ANYONE
+  MUTUAL_FOLLOW
+  COMMUNITY_MEMBER
+}

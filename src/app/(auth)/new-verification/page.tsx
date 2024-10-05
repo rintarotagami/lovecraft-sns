@@ -1,4 +1,4 @@
-import { NewVerificationClient } from '@/components/NewVerificationClient/NewVerificationClient';
+import { NewVerificationClient } from '@/components/auth/NewVerificationClient/NewVerificationClient';
 
 const NewVerificationPage = () => {
   return <NewVerificationClient />;

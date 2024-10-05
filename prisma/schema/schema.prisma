@@ -1,0 +1,80 @@
+// これはあなたのPrismaスキーマファイルです。
+// 詳細はドキュメントで学べます: https://pris.ly/d/prisma-schema
+
+// クエリの高速化や、サーバーレス・エッジ関数での簡単なスケーリングをお探しですか？
+// Prisma Accelerateを試してみてください: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole @default(USER)
+  isTwoFactorEnabled Boolean @default(true)
+  twoFactorConfirmation TwoFactorConfirmation?
+  accounts Account[]
+  gameSessionGM GameSessionGM[]
+  GameSessionPlayers GameSessionPlayer[]
+  GameSessionSpectators GameSessionSpectator[]
+  authors            Author[]
+  searchedName     SearchedName? @relation("UserSearchedName")
+  followers Follow[] @relation("UserFollows")
+  followings Follow[] @relation("UserFollowings")
+}
+
+model SearchedName {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  searchedName String @unique
+  userId String @unique @db.ObjectId
+  user     User @relation("UserSearchedName", fields: [userId], references: [id])
+  updatedAt DateTime @updatedAt
+}
+
+model Follow {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId String @db.ObjectId
+  followingId String @db.ObjectId
+  createdAt DateTime @default(now())
+  
+  follower User @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+
+model Account {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String  @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+

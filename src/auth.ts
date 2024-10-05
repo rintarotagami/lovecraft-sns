@@ -6,6 +6,7 @@ import { UserRole } from '@prisma/client';
 import { getUserById } from '@/db/user';
 import { getTwoFactorConfirmationByUserId } from '@/db/two-factor-confirmation';
 import { getAccountByUserId } from '@/db/account';
+import { ulid } from 'ulid';
 
 export const {
     handlers: { GET, POST },
@@ -19,9 +20,18 @@ export const {
     },
     events: {
         async linkAccount({ user }) {
+            const hashedName = ulid();
             await db.user.update({
                 where: { id: user.id },
-                data: { emailVerified: new Date() },
+                data: { 
+                    emailVerified: new Date(),
+                    image: "noImage",
+                    searchedName: {
+                        create: {
+                            searchedName: hashedName,
+                        },
+                    },
+                },
             });
         },
     },
@@ -36,7 +46,6 @@ export const {
             // メール認証なしでのサインインを防止する
             if (!existingUser?.emailVerified) return false;
 
-            // TODO: OTP認証を実装する
             if (existingUser.isTwoFactorEnabled) {
                 const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
                     existingUser.id

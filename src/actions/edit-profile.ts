@@ -7,8 +7,9 @@ import { auth } from '@/auth';
 import { db } from '@/lib/db';
 import { generateVerificationToken } from '@/lib/tokens';
 import { sendVerificationEmail } from '@/lib/mail';
-import { editProfileSchema } from '@/schemas';
+import { editProfileSchema } from '@/zod-schemas';
 import { getUserByEmail, getUserById } from '@/db/user';
+import { getSearchedNameBySearchedName } from '@/db/searched-name'
 import { ActionsResultWithData } from '@/types/ActionsResult';
 import { revalidatePath } from 'next/cache';
 
@@ -90,12 +91,36 @@ export const editProfile = async (
         values.newPassword = undefined;
     }
 
+    if (values.searchedName) {
+        const existingSearchedName = await getSearchedNameBySearchedName(values.searchedName);
+
+        if (existingSearchedName) {
+            return {
+                isSuccess: false,
+                error: { message: 'このユーザーIDは既に使用されています。' },
+            };
+        }
+    }
+
+    // ユーザー情報のアップデート
     const updatedUser = await db.user.update({
         where: { id: dbUser.id },
         data: {
-            ...values,
+            email: values.email,
+            password: values.password,
+            isTwoFactorEnabled: values.isTwoFactorEnabled,
         },
     });
+
+    // searchedNameのアップデート
+    if (values.searchedName) {
+        await db.searchedName.update({
+            where: { userId: dbUser.id },
+            data: {
+                searchedName: values.searchedName,
+            },
+        });
+    }
 
     revalidatePath('/my-account');
 
