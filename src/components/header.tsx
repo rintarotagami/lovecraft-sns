@@ -2,7 +2,6 @@ import React from "react";
 import LoveCraft_logo from "@/assets/img/LoveCraft_logo.png";
 import Image from "next/image";
 import Link from "next/link";
-import EditProfileSheet from "./EditProfileSheet/EditProfileSheet work";
 import { auth } from '@/auth';
 import SignOutButton from "@/components/auth/SignOutButton/SignOutButton"
 
@@ -15,19 +14,9 @@ const Header: React.FC = async () => {
             <nav className="flex items-center space-x-4">
                 <ul className="flex space-x-4">
                     <li>
-                        <Link rel="stylesheet" href="/session" className="text-gray-600 hover:text-gray-900">
+                        <Link rel="stylesheet" href="/session" className="text-gray-300 hover:text-gray-50">
                             マイページ
                         </Link>
-                    </li>
-                    <li>
-                        <a href="#" className="text-gray-600 hover:text-gray-900">
-                            コース
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" className="text-gray-600 hover:text-gray-900">
-                            お問い合わせ
-                        </a>
                     </li>
                 </ul>
                 <div className="flex space-x-4">
@@ -37,10 +26,10 @@ const Header: React.FC = async () => {
                         </>
                     ) : (
                         <>
-                            <Link href="/sign-up" className="text-gray-600 hover:text-gray-900">
+                            <Link href="/sign-up" className="text-gray-300 hover:text-gray-50">
                                 会員登録
                             </Link>
-                            <Link href="/sign-in" className="text-gray-600 hover:text-gray-900">
+                            <Link href="/sign-in" className="text-gray-300 hover:text-gray-50">
                                 ログイン
                             </Link>
                         </>

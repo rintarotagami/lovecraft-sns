@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface UserIconProps {
     imageName: string;
@@ -31,7 +32,7 @@ const UserIcon: React.FC<UserIconProps> = ({ imageName, altText, className }) =>
         loadImage();
     }, [imageName]);
 
-    return <img src={imageUrl} alt={altText} className={`rounded-full ${className}`} />;
+    return <Image src={imageUrl} alt={altText} className={`rounded-full ${className}`} />;
 };
 
 export default UserIcon;

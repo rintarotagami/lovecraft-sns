@@ -17,7 +17,7 @@ import { FormError } from '@/components/FormError/FormError';
 
 import { signUpSchema } from '@/zod-schemas';
 import { useState, useTransition } from 'react';
-import { signUp } from '@/actions/sign-up';
+import { signUp } from '@/actions/auth/sign-up';
 import { useRouter } from 'next/navigation'; 
 
 export function SignUpForm() {

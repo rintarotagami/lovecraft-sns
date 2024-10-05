@@ -1,5 +1,3 @@
-import SessionEditButton from "@/components/SessionCard/SessionEditButton/SessionEditButton"
-import SessionDeleteButton from "@/components/SessionCard/SessionDeleteButton/SessionDeleteButton"
 import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
 import { gameSessionSchema } from '@/zod-schemas/game-session';
 import { MdDateRange, MdAccessTime, MdTimer } from 'react-icons/md';
