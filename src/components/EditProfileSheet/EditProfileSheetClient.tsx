@@ -80,13 +80,6 @@ const EditProfileSheetClient = ({ searchedName }: { searchedName: string }) => {
         });
     };
 
-    async function fetchUserName() {
-        const user = useCurrentUser();
-        const result = user && user.id ? await getSearchedName(user.id) : null;
-        // console.log(user);
-        return result;
-    }
-
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
