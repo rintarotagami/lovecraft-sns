@@ -24,8 +24,8 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="ja">
-        <body className={inter.className}>
+      <html lang="ja" >
+        <body className={inter.className} suppressHydrationWarning={true}>
           <Toaster />
           {children}
         </body>

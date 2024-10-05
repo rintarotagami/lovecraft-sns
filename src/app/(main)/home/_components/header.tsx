@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchBar from '@/app/(main)/home/_components/SearchBar/SerachBar';
+import SearchBar from '@/components/SearchBar/SearchBar';
 
 const Header: React.FC = () => {
     return (

@@ -40,17 +40,18 @@ export const signUp = async (
             };
         }
 
-        const hashedName = ulid();
+        const randomName = ulid();
         // ユーザーを作成
         //newUserはawait db.user.createの結果を受け取る
         const newUser = await db.user.create({
             data: {
                 name: nickname,
                 email,
+                image: "noImage.png",
                 password: hashedPassword,
                 searchedName: {
                     create: {
-                        searchedName: hashedName,
+                        searchedName: randomName,
                     },
                 }
             },

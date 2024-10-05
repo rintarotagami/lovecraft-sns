@@ -19,3 +19,17 @@ export const getUserById = async (id: string) => {
         return null;
     }
 };
+
+export const getUserBySearchedId = async (searchedId: string) => {
+    try {
+        const searchedName = await db.searchedName.findUnique({
+            where: { searchedName: searchedId },
+            include: { user: true },
+        });
+
+        return searchedName?.user || null;
+    } catch (e) {
+        return null;
+    }
+};
+

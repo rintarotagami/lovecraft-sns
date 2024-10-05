@@ -1,30 +1,29 @@
 'use server'
 
-import { ScenarioSchema } from "@/zod-schemas/scenario"
+import { UploadScenarioSchema } from "@/zod-schemas/scenario"
 import { redirect } from "next/navigation"
 import { db } from "@/lib/db"
-import { uploadImg } from '@/lib/gcsImage';
+import { uploadImg } from '@/lib/ScenarioImage';
+
+type UploadImage = FileList;
 
 export interface FormState {
     error: string
     messages: Record<string, string>;
 }
 
-export const createScenario = async (state: FormState, formData: FormData): Promise<FormState> => {
+export const createScenario = async ( state: FormState, formData: FormData): Promise<FormState> => {
     // console.log('createScenarioが呼び出されました');
     // console.log('フォームデータ:', formData);
 
     const files = formData.getAll('uploadImages') as File[];
-    console.log(files)
+    // console.log(files)
     files.forEach((file, index) => {
         console.log(`ファイル ${index + 1}:`);
         console.log(`名前: ${file.name}`);
         console.log(`サイズ: ${file.size} バイト`);
         console.log(`タイプ: ${file.type}`);
     });
-
-    const tagsInput = formData.get('tags') as string;
-    const tags = tagsInput ? tagsInput.split(',') : [];
 
     const authors = formData.getAll('summary.authors').map((author, index) => ({
         role: formData.get(`summary.authors.${index}.role`) as string,
@@ -36,18 +35,17 @@ export const createScenario = async (state: FormState, formData: FormData): Prom
     const updateHistory = JSON.parse(formData.get('updateHistory') as string);
     const videoUrls = JSON.parse(formData.get('videoUrls') as string);
 
-    const newScenario: ScenarioSchema = {
+    const newScenario: UploadScenarioSchema = {
         summary: {
             title: formData.get('summary.title') as string,
             overview: formData.get('summary.overview') as string,
             introduction: formData.get('summary.introduction') as string,
-            tags: tags,
+            tags: formData.getAll('summary.tags') as string[],
             isGMless: Boolean(formData.get('summary.isGMless')),
             expectedPlayers: Number(formData.get('summary.expectedPlayers')),
             expectedPlayTime: formData.get('summary.expectedPlayTime') as string,
             imageNames: [],
             authors: authors,
-            gameSessions: [],
             scenarioDetailId: formData.get('summary.scenarioDetailId') as string,
         },
         detail: {
@@ -61,20 +59,21 @@ export const createScenario = async (state: FormState, formData: FormData): Prom
             updateHistory: updateHistory,
             videoUrls: videoUrls,
         },
+        uploadImages: []
     }
 
     try {
         // トランザクションを開始
         await db.$transaction(async (prisma) => {
             // 画像のアップロード
-            try {
-                const uploadedImageNames = await Promise.all(files.map(file => uploadImg(file)));
-                newScenario.summary.imageNames = uploadedImageNames;
-            } catch (error) {
-                state.error = '画像のアップロードに失敗しました';
-                console.error(state.error, error);
-                throw error;
-            }
+            // try {
+            //     const uploadedImageNames = await Promise.all(files.map(file => uploadImg(file)));
+            //     newScenario.summary.imageNames = uploadedImageNames;
+            // } catch (error) {
+            //     state.error = '画像のアップロードに失敗しました';
+            //     console.error(state.error, error);
+            //     throw error;
+            // }
 
             // シナリオ概要の作成
             let scenario;

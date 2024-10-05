@@ -19,7 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/FormError/FormError';
 import { FormSuccess } from '@/components/FormSuccess/FormSuccess';
-import { resetPassword } from '@/actions/reset-password';
+import { resetPassword } from '@/actions/auth/reset-password';
 import { useRouter } from 'next/navigation';
 
 export const ResetPasswordForm = () => {

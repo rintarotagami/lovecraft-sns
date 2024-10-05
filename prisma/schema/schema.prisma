@@ -30,21 +30,35 @@ model User {
   isTwoFactorEnabled Boolean @default(true)
   twoFactorConfirmation TwoFactorConfirmation?
   accounts Account[]
-  gameSessionSummariesGM GameSessionSummaryGM[]
-  gameSessionSummariesApplicant GameSessionSummaryApplicant[]
-  gameSessionDetailPlayers GameSessionDetailPlayer[]
-  gameSessionDetailSpectators GameSessionDetailSpectator[]
+  gameSessionGM GameSessionGM[]
+  GameSessionPlayers GameSessionPlayer[]
+  GameSessionSpectators GameSessionSpectator[]
   authors            Author[]
-  searchedName     SearchedName? @relation
+  searchedName     SearchedName? @relation("UserSearchedName")
+  followers Follow[] @relation("UserFollows")
+  followings Follow[] @relation("UserFollowings")
 }
 
 model SearchedName {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   searchedName String @unique
   userId String @unique @db.ObjectId
-  user     User @relation(fields: [userId], references: [id])
+  user     User @relation("UserSearchedName", fields: [userId], references: [id])
   updatedAt DateTime @updatedAt
 }
+
+model Follow {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  followerId String @db.ObjectId
+  followingId String @db.ObjectId
+  createdAt DateTime @default(now())
+  
+  follower User @relation("UserFollows", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
 
 model Account {
   id                 String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -63,34 +77,4 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model VerificationToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String
-  token String @unique
-  expires DateTime
-  @@unique([email, token])
-}
-
-model PasswordResetToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String
-  token String @unique
-  expires DateTime
-  @@unique([email, token])
-}
-
-model TwoFactorToken {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String
-  token String @unique
-  expires DateTime
-  @@unique([email, token])
-}
-
-model TwoFactorConfirmation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([userId])
-}
 

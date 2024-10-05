@@ -17,7 +17,7 @@ import { FormError } from '@/components/FormError/FormError';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 import { signInSchema } from '@/zod-schemas/index';
-import { signIn } from '@/actions/sign-in';
+import { signIn } from '@/actions/auth/sign-in';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 

@@ -1,4 +1,5 @@
 "use client"
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createScenario, FormState } from "@/actions/scenario"
 import { useFormState, useFormStatus } from "react-dom"
@@ -14,7 +15,7 @@ import { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, F
 
 type OptionalFields = 'introduction' | 'tags' | 'url' | 'precaution' | 'prohibition';
 
-const NewScenarioForm = () => {
+export function NewScenarioForm () {
     const initialState: FormState = { error: '', messages: {} }
     const [state, formAction] = useFormState(createScenario, initialState)
     const [authors, setAuthors] = useState([{ id: '', role: '', name: '', userId: '', description: '' }])
@@ -60,9 +61,9 @@ const NewScenarioForm = () => {
         mode: 'onTouched',
     });
 
-    const handleSubmit = async (data: UploadScenarioSchema) => {
+    const onSubmit = async (data: UploadScenarioSchema) => {
         try {
-            console.log("test");
+            console.log("test"); 
             const formData = new FormData();
             // フォームデータをFormDataに追加
             formData.append('data', JSON.stringify(data));
@@ -78,20 +79,6 @@ const NewScenarioForm = () => {
             console.error("エラーが発生しました:", error);
         }
     };
-
-    const SubmitButton = () => {
-        const { pending } = useFormStatus()
-
-        return (
-            <button
-                type="submit"
-                className="mt-8 py-3 w-full rounded-lg text-white bg-gradient-to-r from-amber-500 to-amber-700 text-sm font-semibold shadow-lg disabled:opacity-50 transition duration-300 ease-in-out hover:shadow-xl"
-                disabled={pending}
-            >
-                作成
-            </button>
-        )
-    }
 
     const toggleOptional = (field: OptionalFields) => {
         setShowOptional(prev => ({ ...prev, [field]: !prev[field] }))
@@ -124,7 +111,7 @@ const NewScenarioForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 mx-auto w-full max-w-7xl bg-gradient-to-br from-amber-50 to-amber-100 p-8 rounded-2xl shadow-2xl">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 mx-auto w-full max-w-7xl bg-gradient-to-br from-amber-50 to-amber-100 p-8 rounded-2xl shadow-2xl">
                 <div className="flex flex-col md:flex-row">
                     {/* 左側：画像アップロード */}
                     <div className="w-full md:w-1/3 pr-8 mb-8 md:mb-0">
@@ -845,7 +832,12 @@ const NewScenarioForm = () => {
                         <input type="hidden" name="authors" value={JSON.stringify(authors)} />
                         <input type="hidden" name="updateHistory" value={JSON.stringify(updateHistory)} />
                         <input type="hidden" name="videoUrls" value={JSON.stringify(videoUrls)} />
-                        <SubmitButton />
+                        <button
+                            type="submit"
+                            className="mt-8 py-3 w-full rounded-lg text-white bg-gradient-to-r from-amber-500 to-amber-700 text-sm font-semibold shadow-lg disabled:opacity-50 transition duration-300 ease-in-out hover:shadow-xl"
+                        >
+                            作成
+                        </button>
                         {state.error && (
                             <motion.p
                                 className="mt-2 text-sm text-red-500"
@@ -862,5 +854,3 @@ const NewScenarioForm = () => {
         </Form>
     )
 }
-
-export default NewScenarioForm

@@ -25,6 +25,7 @@ export const {
                 where: { id: user.id },
                 data: { 
                     emailVerified: new Date(),
+                    image: "noImage",
                     searchedName: {
                         create: {
                             searchedName: hashedName,

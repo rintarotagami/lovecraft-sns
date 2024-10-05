@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 let cache: any[] = [];
 let lastFetchedId: string | null = null;
 
-export const getScenarioSummary = async () => {
+export const getScenarioSummary = async () => {   
     try {
         if (cache.length === 0) {
             const scenarios = await db.scenarioSummary.findMany({
@@ -25,6 +25,40 @@ export const getScenarioSummary = async () => {
 
         return result;
     } catch {
+        return [];
+    }
+};
+
+export const getScenarioById = async (DetailId: string) => {
+    try {
+        const scenario = await db.scenarioSummary.findUnique({
+            where: { id: DetailId },
+            include: { scenarioDetail: true },
+        });
+
+        if (scenario) {
+            return scenario;
+        } else {
+            return null;
+        }
+    } catch {
+        return null;
+    }
+};
+
+export const getScenariosByPartialMatch = async (partialName: string) => {
+    try {
+        const results = await db.scenarioSummary.findMany({
+            where: {
+                title: {
+                    contains: partialName,
+                },
+            },
+        });
+
+        return results;
+    } catch (error) {
+        console.error('部分一致するシナリオの取得時にエラーが発生しました:', error);
         return [];
     }
 };

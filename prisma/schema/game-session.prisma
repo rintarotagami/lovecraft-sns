@@ -1,65 +1,45 @@
-model GameSessionSummary {
+model GameSession {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  title              String
-  dueDate            DateTime
-  communicationType  CommunicationType
+  playDate           String
+  startTime          String
   qualification      Qualification @default(ANYONE)
   scenarioId         String   @db.ObjectId
   scenario           ScenarioSummary @relation(fields: [scenarioId], references: [id])
-  gms                GameSessionSummaryGM[] @relation
-  applicants         GameSessionSummaryApplicant[] @relation
+  gms                GameSessionGM[] @relation
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-  detail             GameSessionDetail?
-  detailId           String?  @unique @db.ObjectId
-}
-
-model GameSessionDetail {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  gameSessionId      String   @unique @db.ObjectId
   description        String
   isMobileCompatible Boolean  @default(false)
-  isSpectator        SpectatorType @default(ANYONE)
-  ageLimit           Int?     @default(0)
-  players            GameSessionDetailPlayer[]
-  spectators         GameSessionDetailSpectator[]
-  summary            GameSessionSummary @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+  isSpectator        SpectatorType @default(NONE)
+  players            GameSessionPlayer[]
+  spectators         GameSessionSpectator[]
 }
 
-model GameSessionSummaryGM {
+model GameSessionGM {
   id                   String @id @default(auto()) @map("_id") @db.ObjectId
-  gameSessionSummaryId String? @db.ObjectId
+  gameSessionId String? @db.ObjectId
   userId               String? @db.ObjectId
-  gameSessionSummary   GameSessionSummary? @relation(fields: [gameSessionSummaryId], references: [id], onDelete: SetNull)
+  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                 User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  @@unique([gameSessionSummaryId, userId])
+  @@unique([gameSessionId, userId])
 }
 
-model GameSessionSummaryApplicant {
+model GameSessionPlayer {
   id                   String @id @default(auto()) @map("_id") @db.ObjectId
-  gameSessionSummaryId String? @db.ObjectId
-  userId               String? @db.ObjectId
-  gameSessionSummary   GameSessionSummary? @relation(fields: [gameSessionSummaryId], references: [id], onDelete: SetNull)
-  user                 User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  @@unique([gameSessionSummaryId, userId])
-}
-
-model GameSessionDetailPlayer {
-  id                   String @id @default(auto()) @map("_id") @db.ObjectId
-  gameSessionDetailId String? @db.ObjectId
+  gameSessionId String? @db.ObjectId
   userId              String? @db.ObjectId
-  gameSessionDetail   GameSessionDetail? @relation(fields: [gameSessionDetailId], references: [id], onDelete: SetNull)
+  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  @@unique([gameSessionDetailId, userId])
+  @@unique([gameSessionId, userId])
 }
 
-model GameSessionDetailSpectator {
+model GameSessionSpectator {
   id                   String @id @default(auto()) @map("_id") @db.ObjectId
-  gameSessionDetailId String? @db.ObjectId
+  gameSessionId String? @db.ObjectId
   userId              String? @db.ObjectId
-  gameSessionDetail   GameSessionDetail? @relation(fields: [gameSessionDetailId], references: [id], onDelete: SetNull)
+  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-  @@unique([gameSessionDetailId, userId])
+  @@unique([gameSessionId, userId])
 }
 
 enum CommunicationType {
@@ -75,6 +55,7 @@ enum Qualification {
 }
 
 enum SpectatorType {
+  NONE
   ANYONE
   MUTUAL_FOLLOW
   COMMUNITY_MEMBER

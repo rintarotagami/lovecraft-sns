@@ -30,3 +30,20 @@ export const getSearchedNameBySearchedName = async (searchedName: string) => {
         return null;
     }
 };
+
+export const getSearchedNamesByPartialMatch = async (partialName: string) => {
+    try {
+        const results = await db.searchedName.findMany({
+            where: {
+                searchedName: {
+                    contains: partialName,
+                },
+            },
+        });
+
+        return results;
+    } catch (error) {
+        console.error('部分一致する名前の取得時にエラーが発生しました:', error);
+        return [];
+    }
+};

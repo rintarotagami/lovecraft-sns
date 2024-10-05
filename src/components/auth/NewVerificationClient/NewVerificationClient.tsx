@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { newVerification } from '@/actions/new-verification';
+import { newVerification } from '@/actions/auth/new-verification';
 import { Spinner } from '@/components/Spinner/Spinner';
 import { FormError } from '@/components/FormError/FormError';
 import { FormSuccess } from '@/components/FormSuccess/FormSuccess';

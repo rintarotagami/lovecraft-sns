@@ -9,14 +9,13 @@ model ScenarioSummary {
   expectedPlayTime   String
   imageNames         String[]
   authors            AuthorScenario[] 
-  gameSessions       GameSessionSummary[] @relation
+  gameSessions       GameSession[] @relation
   scenarioDetail     ScenarioDetail? @relation(fields: [scenarioDetailId], references: [id])
   scenarioDetailId   String? @unique @db.ObjectId
 }
 
 model ScenarioDetail {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  description        String?
   contents           String
   url                String?
   precaution         String?
@@ -24,8 +23,19 @@ model ScenarioDetail {
   termsOfUse         String
   commercialUse      String
   updateHistory      UpdateHistory[] 
-  scenarioSummary    ScenarioSummary? @relation
   videoUrls          String[]
+  description        String?
+  characters         Character[] 
+  scenarioSummary    ScenarioSummary? @relation
+}
+
+model Character {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String
+  image              String?
+  scenarioDetailId   String @db.ObjectId
+  scenarioDetail     ScenarioDetail @relation(fields: [scenarioDetailId], references: [id])
 }
 
 model UpdateHistory {

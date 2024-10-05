@@ -1,10 +1,15 @@
 import Link from 'next/link'
 import { MdAddTask } from 'react-icons/md'
 import { getScenarioSummary } from '@/db/scenario'
-import ScenarioCard from '@/components/ScenarioCard/ScenarioCard'
+import ScenarioCard from '@/app/(main)/home/_components/Scenario/ScenarioCard/ScenarioCard'
+
+let cache: any[] = [];
 
 export default async function ScenarioPage() {
-    const allScenarios = await getScenarioSummary()
+    if (cache.length === 0) {
+        cache = await getScenarioSummary();
+    }
+    const allScenarios = cache;
     // console.log(allScenarios)
 
     return (
