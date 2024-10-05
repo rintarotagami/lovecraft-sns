@@ -16,9 +16,9 @@ const NavList = () => {
     const navList: NavItemType[] = [
         { id: 1, label: 'セッション', link: '/session', icon: <FaEnvelope className='size-5' /> },
         { id: 2, label: 'ホーム', link: '/home', icon: <FaHome className='size-5' /> },
-        { id: 3, label: 'コミュニティ', link: '/community', icon: <HiUserGroup className='size-5' /> },
-        { id: 4, label: 'チャット', link: '/chat', icon: <IoChatbubbleEllipsesSharp className='size-5' /> },
-        { id: 5, label: '通知', link: '/notification', icon: <FaBell className='size-5' /> },
+        // { id: 3, label: 'コミュニティ', link: '/community', icon: <HiUserGroup className='size-5' /> },
+        // { id: 4, label: 'チャット', link: '/chat', icon: <IoChatbubbleEllipsesSharp className='size-5' /> },
+        // { id: 5, label: '通知', link: '/notification', icon: <FaBell className='size-5' /> },
     ]
     return (
         <div className='mt-24'>

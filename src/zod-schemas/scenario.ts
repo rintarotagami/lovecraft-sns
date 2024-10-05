@@ -52,7 +52,3 @@ export const uploadScenarioSchema = scenarioSchema.extend({
 
 export type UploadScenarioSchema = z.infer<typeof uploadScenarioSchema>;
 
-
-export const test = z.object({
-    test: z.string().optional(),
-})

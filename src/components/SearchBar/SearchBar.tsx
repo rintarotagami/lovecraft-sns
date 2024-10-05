@@ -43,7 +43,8 @@ const SearchBar: React.FC = () => {
                 <input
                     type='text'
                     className='appearance-none bg-transparent border-none w-full text-gray-400 mr-3 py-1 px-2 leading-tight focus:outline-none rounded-full'
-                    placeholder='投稿 / @ユーザーID / &シナリオ名 / #タグ で検索...'
+                    placeholder='@ユーザーID / &シナリオ名で検索...'
+                    // 投稿 / @ユーザーID / &シナリオ名 / #タグ で検索...
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setIsFocused(true)}

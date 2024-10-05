@@ -4,8 +4,8 @@ import { z } from 'zod';
 import { createGameSession, FormState } from "@/actions/session"
 import { useFormStatus } from "react-dom"
 import ScenarioSearchBar from '@/components/SearchBar/ScenarioSearchBar/ScenarioSearchBar';
-import ScenarioImage from '@/app/(main)/home/_components/Scenario/ScenarioImage/ScenarioImage';
-import { useState } from "react";
+import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaInfoCircle } from 'react-icons/fa';
@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { gameSessionSchema } from '@/zod-schemas/game-session';
 import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
+import { SelectedScenario } from '@/types/SessionScenarioSchema';
 
 import {
     Form,
@@ -26,8 +27,7 @@ import {
 } from '@/components/ui/form';
 
 const NewSessionForm = () => {
-    const initialState: FormState = { error: '' }
-    const [selectedScenario, setSelectedScenario] = useState<{ id: string; title: string; expectedPlayers: number; imageNames: string[]; isGMless: Boolean; expectedPlayTime: string; } | null>(null);
+    const [selectedScenario, setSelectedScenario] = useState<SelectedScenario | null>(null);
     const [scenarioError, setScenarioError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -37,15 +37,23 @@ const NewSessionForm = () => {
             playDate: "",
             startTime: "",
             qualification: 'ANYONE',
-            scenarioId: selectedScenario?.id || '',
-            gms: [],
+            scenarioId: '',
             description: '',
             isMobileCompatible: false,
             isSpectator: 'NONE',
-            players: [],
-            spectators: [],
+            maxPlayers: 1,
+            isRecruiting: true,
+
+            scenario: { isGMless: selectedScenario?.isGMless || false, }
+            //Session作成時にplayerにsess.userを登録するか、gmに登録するかの識別に使います。
         },
     });
+
+    useEffect(() => {
+        if (selectedScenario) {
+            form.setValue('description', `一緒に${selectedScenario.title}をプレイしましょう！`);
+        }
+    }, [selectedScenario, form]);
 
     const onSubmit = async (data: z.infer<typeof gameSessionSchema>) => {
         if (!selectedScenario) {
@@ -54,6 +62,7 @@ const NewSessionForm = () => {
         } else {
             setScenarioError(null);
             data.scenarioId = selectedScenario.id;
+            data.maxPlayers = selectedScenario.expectedPlayers;
         }
 
         try {
@@ -118,7 +127,6 @@ const NewSessionForm = () => {
                                     <textarea
                                         id="description"
                                         className="mt-2 block py-1.5 px-2 w-full rounded-md border border-gray-300 shadow-sm ring-1 ring-inset ring-gray-300"
-                                        defaultValue={selectedScenario ? `一緒に${selectedScenario.title}をプレイしましょう！` : ''}
                                         {...field}
                                     />
                                 </FormControl>

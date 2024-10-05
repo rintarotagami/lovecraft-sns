@@ -1,6 +1,6 @@
 import { getScenarioById } from '@/db/scenario';
 import { auth } from '@/auth';
-import ScenarioImage from '@/app/(main)/home/_components/Scenario/ScenarioImage/ScenarioImage';
+import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
 import { FaUsers, FaClock, FaExclamationTriangle, FaBan, FaFileAlt, FaVideo, FaInfoCircle } from 'react-icons/fa';
 
 interface Params {

@@ -1,7 +1,7 @@
 import { ScenarioSummarySchema } from '@/zod-schemas/scenario';
 import Link from 'next/link';
-import ScenarioImage from '@/app/(main)/home/_components/Scenario/ScenarioImage/ScenarioImage';
-import Loading from '@/app/(main)/home/_components/Scenario/ScenarioImage/loading/loading';
+import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
+import Loading from '@/components/Scenario/ScenarioImage/loading/loading';
 
 
 interface ScenarioCardProps {

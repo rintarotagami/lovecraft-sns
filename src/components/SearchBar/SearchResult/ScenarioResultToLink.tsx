@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import ScenarioImage from '@/app/(main)/home/_components/Scenario/ScenarioImage/ScenarioImage';
+import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
 
 interface ScenarioResultToLinkProps {
     isFocused: boolean;

@@ -6,6 +6,7 @@ import { gameSessionSchema } from "@/zod-schemas/game-session"
 import { db } from "@/lib/db"
 import { auth } from '@/auth';
 import { ActionsResultWithData } from '@/types/ActionsResult';
+import { revalidatePath } from 'next/cache';
 
 export interface FormState {
     error: string
@@ -28,17 +29,6 @@ export const createGameSession = async (
     try {
         const createdSession = await db.gameSession.create({
             data: {
-                gms: {
-                    create: values.gms.map(gm => ({
-                        user: { connect: { id: user.id } }
-                    }))
-                },
-                players: {
-                    create: []
-                },
-                spectators: {
-                    create: []
-                },
                 scenario: {
                     connect: { id: values.scenarioId }
                 },
@@ -48,8 +38,28 @@ export const createGameSession = async (
                 qualification: values.qualification,
                 isMobileCompatible: values.isMobileCompatible,
                 isSpectator: values.isSpectator,
+                maxPlayers: values.maxPlayers,
+                currentPlayers: values.scenario?.isGMless ? 1 : 0
             }
         });
+
+        if (values.scenario?.isGMless) {
+            await db.gameSessionPlayer.create({
+                data: {
+                    gameSessionId: createdSession.id,
+                    userId: user.id,
+                }
+            });
+        } else {
+            await db.gameSessionGM.create({
+                data: {
+                    gameSessionId: createdSession.id,
+                    userId: user.id,
+                }
+            });
+        }
+
+        revalidatePath('/session')
 
         return {
             isSuccess: true,

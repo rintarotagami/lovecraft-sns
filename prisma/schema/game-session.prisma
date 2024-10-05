@@ -5,22 +5,26 @@ model GameSession {
   qualification      Qualification @default(ANYONE)
   scenarioId         String   @db.ObjectId
   scenario           ScenarioSummary @relation(fields: [scenarioId], references: [id])
-  gms                GameSessionGM[] @relation
+  gms                GameSessionGM[] @relation("SessionGM")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   description        String
   isMobileCompatible Boolean  @default(false)
   isSpectator        SpectatorType @default(NONE)
-  players            GameSessionPlayer[]
+  players            GameSessionPlayer[] 
   spectators         GameSessionSpectator[]
+  maxPlayers         Int
+  currentPlayers     Int @default(0)
+  isRecruiting       Boolean @default(true)
 }
 
 model GameSessionGM {
   id                   String @id @default(auto()) @map("_id") @db.ObjectId
   gameSessionId String? @db.ObjectId
   userId               String? @db.ObjectId
-  gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
+  gameSession   GameSession? @relation("SessionGM", fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                 User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
   @@unique([gameSessionId, userId])
 }
 
@@ -30,6 +34,7 @@ model GameSessionPlayer {
   userId              String? @db.ObjectId
   gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
   @@unique([gameSessionId, userId])
 }
 
@@ -39,6 +44,7 @@ model GameSessionSpectator {
   userId              String? @db.ObjectId
   gameSession   GameSession? @relation(fields: [gameSessionId], references: [id], onDelete: SetNull)
   user                User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
   @@unique([gameSessionId, userId])
 }
 

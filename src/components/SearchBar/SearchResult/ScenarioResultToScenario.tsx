@@ -1,10 +1,11 @@
 import React from 'react';
-import ScenarioImage from '@/app/(main)/home/_components/Scenario/ScenarioImage/ScenarioImage';
+import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
+import { SelectedScenario } from '@/types/SessionScenarioSchema';
 
 interface ScenarioResultToScenarioProps {
     isFocused: boolean;
-    results: { id: string; title: string; expectedPlayers: number; imageNames: Array<string>; isGMless: Boolean, expectedPlayTime: string, }[],
-    setSelectedScenario: (scenario: { id: string; title: string; expectedPlayers: number; imageNames: Array<string>; isGMless: Boolean, expectedPlayTime: string, } | null) => void; // 親にシナリオを渡すための関数
+    results: SelectedScenario[],
+    setSelectedScenario: (scenario: SelectedScenario | null) => void; // 親にシナリオを渡すための関数
 }
 
 export const ScenarioResultToScenario: React.FC<ScenarioResultToScenarioProps> = ({ isFocused, results, setSelectedScenario }) => {

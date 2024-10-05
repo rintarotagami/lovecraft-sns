@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getScenariosByPartialMatch } from '@/db/scenario';
+import { SelectedScenario } from '@/types/SessionScenarioSchema';
 
 export const GET = async (
     request: NextRequest, 
@@ -21,7 +22,7 @@ export const GET = async (
             return NextResponse.json({ error: '一致するシナリオが見つかりませんでした。' }, { status: 404 });
         }
 
-        const results: { id: string; title: string; expectedPlayers: number; imageNames: Array<string>; isGMless: Boolean, expectedPlayTime: string, }[] = scenarios.map((scenario) => ({
+        const results: SelectedScenario[] = scenarios.map((scenario) => ({
             id: scenario.id,
             title: scenario.title,
             expectedPlayers: scenario.expectedPlayers,

@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { ScenarioResultToScenario } from '@/components/SearchBar/SearchResult/ScenarioResultToScenario';
+import { SelectedScenario } from '@/types/SessionScenarioSchema';
 
 interface ScenarioSearchBarProps {
-    setSelectedScenario: React.Dispatch<React.SetStateAction<{ id: string; title: string; expectedPlayers: number; imageNames: string[]; isGMless: Boolean; expectedPlayTime: string; } | null>>;
+    setSelectedScenario: React.Dispatch<React.SetStateAction<SelectedScenario | null>>;
 }
 
 const ScenarioSearchBar: React.FC<ScenarioSearchBarProps> = ({ setSelectedScenario }) => {
