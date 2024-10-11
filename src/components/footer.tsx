@@ -1,6 +1,6 @@
 const Footer = () => {
     return (
-        <footer className="bg-[#150c0E] text-[#E3BF84] pt-4 pb-10">
+        <footer className="bg-[#150c0E] text-[#E3BF84] pt-4 pb-10 border-t border-t-[#E3BF84]">
             <div className="container mx-auto text-center">
                 <nav className="mt-2">
                     <ul className="flex justify-center space-x-4">
