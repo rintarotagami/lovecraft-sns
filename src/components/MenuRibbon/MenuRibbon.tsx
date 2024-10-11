@@ -17,7 +17,7 @@ const MenuRibbon = () => {
             <span className="Ribbon-inner">
                 <div className='flex flex-col items-center justify-center'>
                     <div
-                        className={classNames(`tham tham-e-squeeze md:tham-w-9 tham-w-6`, { 'tham-active': opened })}
+                        className={classNames(`tham tham-e-squeeze md:tham-w-9 tham-w-8`, { 'tham-active': opened })}
                         onClick={() => setOpened(!opened)}
                     >
                         <div className="tham-box">

@@ -13,6 +13,7 @@ $ribbon-stroke-color: #E3BF84;
     text-decoration: none;
     padding: 0 #{$ribbon-tri-padding} #{$ribbon-tri-padding / 2};
     text-align: center;
+    filter: drop-shadow(-2px 3px 3px rgba(0,0,0,0.6));
 
     &:after {
         content: '';
