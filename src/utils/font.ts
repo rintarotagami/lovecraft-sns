@@ -12,5 +12,5 @@ export const kiwi_Maru = Kiwi_Maru({
     subsets: ["latin"]
 });
 
-export const naishoMoji = localFont({ src: './fonts/NaishoMoji-regular.otf' })
+export const naishoMoji = localFont({ src: './fonts/NaishoMoji-Regular.otf' })
 export const retorogo = localFont({ src: './fonts/851retrogo_007.ttf' })
