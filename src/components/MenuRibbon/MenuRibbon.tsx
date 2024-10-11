@@ -17,14 +17,14 @@ const MenuRibbon = () => {
             <span className="Ribbon-inner">
                 <div className='flex flex-col items-center justify-center'>
                     <div
-                        className={classNames(`tham tham-e-squeeze tham-w-9`, { 'tham-active': opened })}
+                        className={classNames(`tham tham-e-squeeze md:tham-w-9 tham-w-6`, { 'tham-active': opened })}
                         onClick={() => setOpened(!opened)}
                     >
                         <div className="tham-box">
                             <div className="bg-[#E3BF84] tham-inner" />
                         </div>
                     </div>
-                    <p className={`mt-2 ${limelight.className}`}>MENU</p>
+                    <p className={`md:text-base text-sm mt-2 ${limelight.className}`}>MENU</p>
                 </div>
             </span>
         </div>
