@@ -17,17 +17,13 @@ export default async function gameSessionSummaryPage(props: Props) {
     // ReadonlyURLSearchParamsをURLSearchParamsに変換
     const urlSearchParams = new URLSearchParams(searchParams.toString());
 
-    // searchParamsの内容を表示
-    console.log("searchParams", searchParams);
-
     const allQueryParameters = urlSearchParams.toString();
-
-    // URLSearchParamsを使用してクエリパラメータを文字列として取得
-    console.log("allQueryParameters", allQueryParameters);
 
     const gameSessionParam = urlSearchParams.get('gameSession');
     const gameSession = gameSessionParam ? JSON.parse(gameSessionParam) : await getgameSessionById(params.sessionId);
 
+    console.log(gameSession);
+    
     if (!gameSession) {
         return <div>セッションが見つかりませんでした。</div>;
     }

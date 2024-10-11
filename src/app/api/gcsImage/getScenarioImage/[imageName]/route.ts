@@ -1,5 +1,7 @@
 import { Storage } from '@google-cloud/storage';
 import { NextRequest, NextResponse } from "next/server"
+import { getGCPCredentials } from '@/lib/gcp';
+
 
 export const GET = async (
     request: NextRequest, 
@@ -8,10 +10,7 @@ export const GET = async (
     try {
         // console.log('リクエストを受け取りました'); // リクエスト受信のログ
 
-        const storage = new Storage({
-            projectId: process.env.PROJECT_ID,
-            keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-        });
+        const storage = new Storage(getGCPCredentials());
 
         const bucketName = process.env.BUCKET_NAME ?? '';
         const folderName = 'scenarioImages';
@@ -44,7 +43,7 @@ export const GET = async (
         // console.log('署名付きURLを生成しました:', url); // URL生成のログ
         return NextResponse.json({ url }, { status: 200 });
     } catch (error) {
-        // console.error('署名付きURLの生成中にエラーが発生しました', error); // エラーログをconsole.errorに変更
+        console.error('署名付きURLの生成中にエラーが発生しました', error); // エラーログをconsole.errorに変更
         
         return NextResponse.json({ error: '署名付きURLの生成中にエラーが発生しました' }, { status: 500 });
     }
