@@ -1,0 +1,68 @@
+$ribbon-tri-width: 100px;
+$ribbon-tri-height: 30px;
+$ribbon-tri-padding: 9px;
+$ribbon-background-color: #07393E;
+$ribbon-stroke-color: #E3BF84;
+
+.Ribbon {
+    background-color: $ribbon-background-color;
+    color: $ribbon-stroke-color;
+    display: inline-block;
+    width: $ribbon-tri-width;
+    position: relative;
+    text-decoration: none;
+    padding: 0 #{$ribbon-tri-padding} #{$ribbon-tri-padding / 2};
+    text-align: center;
+
+    &:after {
+        content: '';
+        display: block;
+        width:0;
+        height:0;
+        border-style: solid;
+        border-color: $ribbon-background-color transparent transparent transparent;
+        border-width: #{$ribbon-tri-height - ($ribbon-tri-padding / 2) } #{$ribbon-tri-width / 2} 0 #{$ribbon-tri-width / 2};
+
+        position: absolute;
+        top: 100%;
+        left: 0;
+
+    }
+}
+
+.Ribbon-inner {
+    display: block;
+    border-left: 1px solid $ribbon-stroke-color;
+    border-right: 1px solid $ribbon-stroke-color;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+
+    &:before,
+    &:after {
+        content: '';
+        display: block;
+
+        //css triangle
+        width:0;
+        height:0;
+        border-style: solid;
+        border-color: $ribbon-background-color transparent transparent transparent;
+        border-width: #{$ribbon-tri-height -$ribbon-tri-padding} #{($ribbon-tri-width / 2) - $ribbon-tri-padding} 0 #{($ribbon-tri-width / 2) - $ribbon-tri-padding};
+        margin-top: -1px;
+
+        position: absolute;
+        top: 100%;
+        left: -1px;
+        z-index: 5;
+    }
+
+
+    &:before {
+        border-color: $ribbon-stroke-color transparent transparent transparent;
+        border-width: #{$ribbon-tri-height -$ribbon-tri-padding} #{($ribbon-tri-width / 2) - $ribbon-tri-padding} 0 #{($ribbon-tri-width / 2) - $ribbon-tri-padding};
+        margin-top: 0;
+    }
+}

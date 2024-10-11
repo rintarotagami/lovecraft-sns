@@ -1,17 +1,14 @@
 import { Storage } from '@google-cloud/storage';
 import { NextRequest, NextResponse } from "next/server"
+import { getGCPCredentials } from '@/lib/gcp';
 
 export const GET = async (
     request: NextRequest, 
     { params }: { params: { imageName: string } }
 ) => {
     try {
-        // console.log('リクエストを受け取りました'); // リクエスト受信のログ
-
-        const storage = new Storage({
-            projectId: process.env.PROJECT_ID,
-            keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-        });
+        // getGCPCredentialsを使用してStorageインスタンスを作成
+        const storage = new Storage(getGCPCredentials());
 
         const bucketName = process.env.BUCKET_NAME ?? '';
         const folderName = 'userIcons';

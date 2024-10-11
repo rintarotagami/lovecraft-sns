@@ -14,7 +14,7 @@ interface NavItemType {
 
 const NavList = () => {
     const navList: NavItemType[] = [
-        { id: 1, label: 'セッション', link: '/session', icon: <FaEnvelope className='size-5' /> },
+        { id: 1, label: 'ゲームに参加・', link: '/session', icon: <FaEnvelope className='size-5' /> },
         { id: 2, label: 'ホーム', link: '/home', icon: <FaHome className='size-5' /> },
         // { id: 3, label: 'コミュニティ', link: '/community', icon: <HiUserGroup className='size-5' /> },
         // { id: 4, label: 'チャット', link: '/chat', icon: <IoChatbubbleEllipsesSharp className='size-5' /> },

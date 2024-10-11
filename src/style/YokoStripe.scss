@@ -1,0 +1,10 @@
+$yoko-stripe-color1: #fff;
+$yoko-stripe-color2: #e9cff7;
+
+.yoko-stripe {
+  background-image: linear-gradient(0deg,
+    $yoko-stripe-color1 25%, $yoko-stripe-color2 25%, $yoko-stripe-color2 50%, $yoko-stripe-color1 50%, $yoko-stripe-color1 75%, $yoko-stripe-color2 75%, $yoko-stripe-color2
+  );
+}
+
+
