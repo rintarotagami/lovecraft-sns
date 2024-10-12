@@ -15,10 +15,10 @@ const NavItem: React.FC<NavItemProps> = ({
     const pathname = usePathname()
 
     return (
-        <Link href={link} className={`flex p-4 items-center w-full hover:bg-gray-700 font-medium 
-        ${pathname === link ? 'bg-gray-600 border-r-4 border-[#ffba52]' : ''}`}>
+        <Link href={link} className={`flex flex-col p-4 items-center justify-center w-fit hover:bg-gray-700 font-medium 
+        ${pathname === link ? 'block bg-gray-600 border-b-4 border-[#ffba52]' : ''}`}>
             {icon}
-            <div>{label}</div>
+            <div className='block w-fit'>{label}</div>
         </Link>
     )
 }

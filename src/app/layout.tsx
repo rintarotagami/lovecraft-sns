@@ -13,7 +13,6 @@ export const metadata: Metadata = {
   keywords:
     "マーダーミステリー, オンラインセッション, コミュニティ, LoveCraft, ゲームサークル, TRPG, シナリオ, プレイヤー募集, マッチング, Discord, Twitter連携",
   authors: [{ name: "RintaroTagami" }],
-  viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default async function RootLayout({
