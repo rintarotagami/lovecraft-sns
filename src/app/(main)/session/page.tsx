@@ -22,7 +22,7 @@ export default async function SessionPage() {
             </header>
             <div className='md-8 flex flex-wrap gap-4'>
                 {allGameSessions.map((session) => (
-                    <SessionCard key={session.id} s={session} />
+                    <SessionCard s={session} />
                 ))}
             </div>
         </div>

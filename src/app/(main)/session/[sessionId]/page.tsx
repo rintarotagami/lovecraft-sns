@@ -1,29 +1,21 @@
+import React, { useState, useTransition } from 'react';
 import { getgameSessionById } from '@/db/session';
 import { getUserById } from '@/db/user';
-import { auth } from '@/auth';
+import { ReadonlyURLSearchParams } from 'next/navigation';
+
+import SessionEntryButton from './_components/SessionEntryButton'
 import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
 import { FaUsers, FaClock, FaExclamationTriangle, FaBan, FaFileAlt, FaVideo, FaInfoCircle } from 'react-icons/fa';
-import { ReadonlyURLSearchParams } from 'next/navigation';
 import UserIcon from '@/components/userProfile/UserIcon/UserIcon';
 
 type Props = {
     params: { sessionId: string };
-    searchParams: ReadonlyURLSearchParams;
 };
 
-export default async function gameSessionSummaryPage(props: Props) {
-    const { params, searchParams } = props;
+export default async function gameSessionSummaryPage({params}: Props) {
 
-    // ReadonlyURLSearchParamsをURLSearchParamsに変換
-    const urlSearchParams = new URLSearchParams(searchParams.toString());
+    const gameSession = await getgameSessionById(params.sessionId)
 
-    const allQueryParameters = urlSearchParams.toString();
-
-    const gameSessionParam = urlSearchParams.get('gameSession');
-    const gameSession = gameSessionParam ? JSON.parse(gameSessionParam) : await getgameSessionById(params.sessionId);
-
-    console.log(gameSession);
-    
     if (!gameSession) {
         return <div>セッションが見つかりませんでした。</div>;
     }
@@ -45,14 +37,17 @@ export default async function gameSessionSummaryPage(props: Props) {
             <div className="mb-4">
                 <h2 className="text-lg font-semibold">ゲームマスター</h2>
                 <ul>
-                    {await Promise.all(gameSession.gms.map(async (gm: { id: string; userId: string }) => {
-                        const user = await getUserById(gm.userId);
-                        return (
-                            <li key={gm.id} className="text-sm flex items-center">
-                                <UserIcon imageName={user?.image || ''} altText={user?.name || gm.userId} className="w-8 h-8 rounded-full mr-2" />
-                                {user?.name || gm.userId}
-                            </li>
-                        );
+                    {await Promise.all(gameSession.gms.map(async (gm: { id: string; gameSessionId: string | null; userId: string | null }) => {
+                        if (gm.userId) { // userIdがnullでないことを確認
+                            const user = await getUserById(gm.userId);
+                            return (
+                                <li key={gm.id} className="text-sm flex items-center">
+                                    <UserIcon imageName={user?.image || ''} altText={user?.name || gm.userId} className="w-8 h-8 rounded-full mr-2" />
+                                    {user?.name || gm.userId}
+                                </li>
+                            );
+                        }
+                        return null; // userIdがnullの場合の処理
                     }))}
                 </ul>
             </div>
@@ -84,6 +79,7 @@ export default async function gameSessionSummaryPage(props: Props) {
                     }))}
                 </ul> */}
             </div>
+            <SessionEntryButton sessionId={ gameSession.id }/>
         </div>
     );
 }

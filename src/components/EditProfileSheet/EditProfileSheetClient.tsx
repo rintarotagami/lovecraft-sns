@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useSession } from 'next-auth/react';
 import { getSearchedName } from '@/db/searched-name';
 
@@ -40,7 +40,7 @@ interface EditProfileSheetClientProps {
     searchedName: string
 }
 
-const EditProfileSheetClient = ({ searchedName }: { searchedName: string }) => {
+const EditProfileSheetClient = ({ searchedName }: EditProfileSheetClientProps) => {
 
     const user = useCurrentUser();
 
