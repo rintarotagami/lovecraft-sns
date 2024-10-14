@@ -3,7 +3,7 @@ import { getgameSessionById } from '@/db/session';
 import { getUserById } from '@/db/user';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
-import SessionEntryButton from './_components/SessionEntryButton'
+import SessionEntryButton from '@/components/SessionEntryButton/SessionEntryButton'
 import ScenarioImage from '@/components/Scenario/ScenarioImage/ScenarioImage';
 import { FaUsers, FaClock, FaExclamationTriangle, FaBan, FaFileAlt, FaVideo, FaInfoCircle } from 'react-icons/fa';
 import UserIcon from '@/components/userProfile/UserIcon/UserIcon';
