@@ -36,7 +36,7 @@ const DraggableImagePreview: React.FC<DraggableImagePreviewProps> = ({ index, pr
             }}
             className={`relative rounded-lg overflow-hidden shadow-md ${isDragging ? 'opacity-50' : ''}`}
         >
-            <Image src={preview} alt={`プレビュー ${index + 1}`} className="w-full h-auto object-cover" />
+            <Image src={preview} alt={`プレビュー ${index + 1}`} width={500} height={300} className="w-full h-auto object-cover" />
             <button
                 onClick={removeImage}
                 className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300"

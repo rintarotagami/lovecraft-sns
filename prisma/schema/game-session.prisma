@@ -14,7 +14,7 @@ model GameSession {
   players            GameSessionPlayer[] 
   spectators         GameSessionSpectator[]
   maxPlayers         Int
-  currentPlayers     Int @default(0)
+  currentPlayers     Int
   isRecruiting       Boolean @default(true)
 }
 

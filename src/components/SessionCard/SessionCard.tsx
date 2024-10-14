@@ -14,7 +14,6 @@ const GameSessionCard: React.FC<GameSessionCardProps> = ({ s }) => {
                 <Link 
                     href={{ 
                         pathname: `/session/${s.id}`, 
-                        query: { gameSession: JSON.stringify(s) } 
                     }} 
                     className="w-64 h-30 p-4 bg-white rounded-md shadow-md flex flex-col justify-between hover:shadow-lg transition-shadow"
                 >

@@ -11,7 +11,7 @@ export const uploadImg = async (file: File) => {
     const upload = await fetch(url, { method: "POST", body })
 
     if (!upload.ok) {
-        console.log('upload failed')
+        // console.log('upload failed')
         return ''
     }
     return fileName

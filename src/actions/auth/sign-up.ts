@@ -62,13 +62,13 @@ export const signUp = async (
         });
 
         const verificationToken = await generateVerificationToken(email);
-        console.log("Verification token generated:", verificationToken);
+        // console.log("Verification token generated:", verificationToken);
 
         await sendVerificationEmail(
             verificationToken.email,
             verificationToken.token
         );
-        console.log("Verification email sent");
+        // console.log("Verification email sent");
 
         return {
             isSuccess: true,

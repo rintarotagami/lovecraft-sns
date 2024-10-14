@@ -63,7 +63,6 @@ export function NewScenarioForm () {
 
     const onSubmit = async (data: UploadScenarioSchema) => {
         try {
-            console.log("test"); 
             const formData = new FormData();
             // フォームデータをFormDataに追加
             formData.append('data', JSON.stringify(data));

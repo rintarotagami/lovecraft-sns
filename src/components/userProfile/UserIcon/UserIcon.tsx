@@ -12,7 +12,7 @@ interface UserIconProps {
 const fetchImage = async (imageName: string) => {
     const response = await fetch(`/api/gcsImage/getIconImage/${imageName}`);
     const data = await response.json();
-    console.log('取得したデータ:', response);
+    // console.log('取得したデータ:', response);
     return data.url;
 };
 

@@ -8,7 +8,7 @@ export const GET = async (
 ) => {
     
     const { query } = params;
-    console.log(query);
+    // console.log(query);
     
 
     if (!query) {
