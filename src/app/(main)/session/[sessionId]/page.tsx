@@ -12,7 +12,7 @@ type Props = {
     params: { sessionId: string };
 };
 
-export default async function gameSessionSummaryPage({params}: Props) {
+export default async function gameSessionSummaryPage({ params }: Props) {
 
     const gameSession = await getgameSessionById(params.sessionId)
 
@@ -37,8 +37,8 @@ export default async function gameSessionSummaryPage({params}: Props) {
             <div className="mb-4">
                 <h2 className="text-lg font-semibold">ゲームマスター</h2>
                 <ul>
-                    {await Promise.all(gameSession.gms.map(async (gm: { id: string; gameSessionId: string | null; userId: string | null }) => {
-                        if (gm.userId) { // userIdがnullでないことを確認
+                    {await Promise.all(gameSession.gms.map(async (gm: { id: string; userId: string | null }) => {
+                        if (gm.userId) { 
                             const user = await getUserById(gm.userId);
                             return (
                                 <li key={gm.id} className="text-sm flex items-center">
@@ -53,33 +53,12 @@ export default async function gameSessionSummaryPage({params}: Props) {
             </div>
             <div className="mb-4">
                 <h2 className="text-lg font-semibold">プレイヤー</h2>
-                {/* <ul>
-                    {await Promise.all(gameSession.players.map(async (player: { userId: string }) => {
-                        const user = await getUserById(player.userId);
-                        return (
-                            <li key={player.userId} className="text-sm flex items-center">
-                                <UserIcon imageName={user?.image || ''} altText={user?.name || player.userId} className="w-8 h-8 rounded-full mr-2" />
-                                {user?.name || player.userId}
-                            </li>
-                        );
-                    }))}
-                </ul> */}
             </div>
             <div className="mb-4">
                 <h2 className="text-lg font-semibold">観客</h2>
-                {/* <ul>
-                    {await Promise.all(gameSession.spectators.map(async (spectator: { userId: string }) => {
-                        const user = await getUserById(spectator.userId);
-                        return (
-                            <li key={spectator.userId} className="text-sm flex items-center">
-                                <UserIcon imageName={user?.image || ''} altText={user?.name || spectator.userId} className="w-8 h-8 rounded-full mr-2" />
-                                {user?.name || spectator.userId}
-                            </li>
-                        );
-                    }))}
-                </ul> */}
+
             </div>
-            <SessionEntryButton sessionId={ gameSession.id }/>
+            <SessionEntryButton sessionId={gameSession.id} />
         </div>
     );
 }

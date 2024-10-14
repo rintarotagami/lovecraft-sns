@@ -24,7 +24,7 @@ const SessionEntryButton: React.FC<SessionEntryButtonProps> = ({ sessionId }) =>
         };
 
         checkFollowStatus();
-    }, [isRegistered]);
+    }, [isRegistered, sessionId]);
 
     const handleRegisterPlayer = async () => {
         const result = await registerPlayerToSession(sessionId);
