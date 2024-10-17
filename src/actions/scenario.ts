@@ -3,121 +3,101 @@
 import { UploadScenarioSchema } from "@/zod-schemas/scenario"
 import { redirect } from "next/navigation"
 import { db } from "@/lib/db"
-import { uploadImg } from '@/lib/ScenarioImage';
+import { uploadImg } from '@/lib/UploadImage';
+import { ActionsResult } from '@/types/ActionsResult';
 
-type UploadImage = FileList;
-
-export interface FormState {
-    error: string
-    messages: Record<string, string>;
-}
-
-export const createScenario = async ( state: FormState, formData: FormData): Promise<FormState> => {
-    // console.log('createScenarioが呼び出されました');
-    // console.log('フォームデータ:', formData);
-
-    const files = formData.getAll('uploadImages') as File[];
-    // console.log(files)
-    files.forEach((file, index) => {
-        console.log(`ファイル ${index + 1}:`);
-        console.log(`名前: ${file.name}`);
-        console.log(`サイズ: ${file.size} バイト`);
-        console.log(`タイプ: ${file.type}`);
-    });
-
-    const authors = formData.getAll('summary.authors').map((author, index) => ({
-        role: formData.get(`summary.authors.${index}.role`) as string,
-        name: formData.get(`summary.authors.${index}.name`) as string,
-        userId: formData.get(`summary.authors.${index}.userId`) as string,
-        description: formData.get(`summary.authors.${index}.description`) as string,
-    }));
-
-    const updateHistory = JSON.parse(formData.get('updateHistory') as string);
-    const videoUrls = JSON.parse(formData.get('videoUrls') as string);
-
-    const newScenario: UploadScenarioSchema = {
-        summary: {
-            title: formData.get('summary.title') as string,
-            overview: formData.get('summary.overview') as string,
-            introduction: formData.get('summary.introduction') as string,
-            tags: formData.getAll('summary.tags') as string[],
-            isGMless: Boolean(formData.get('summary.isGMless')),
-            expectedPlayers: Number(formData.get('summary.expectedPlayers')),
-            expectedPlayTime: formData.get('summary.expectedPlayTime') as string,
-            imageNames: [],
-            authors: authors,
-            scenarioDetailId: formData.get('summary.scenarioDetailId') as string,
-        },
-        detail: {
-            description: formData.get('detail.description') as string,
-            contents: formData.get('detail.contents') as string,
-            url: formData.get('detail.url') as string,
-            precaution: formData.get('detail.precaution') as string,
-            prohibition: formData.get('detail.prohibition') as string,
-            termsOfUse: formData.get('detail.termsOfUse') as string,
-            commercialUse: formData.get('detail.commercialUse') as string,
-            updateHistory: updateHistory,
-            videoUrls: videoUrls,
-        },
-        uploadImages: []
-    }
-
+export const createScenario = async (
+    formData: FormData,
+): Promise<ActionsResult> => {
     try {
+        // formDataをUploadScenarioSchemaに変換
+        const data: UploadScenarioSchema = {
+            summary: {
+                title: formData.get('title') as string,
+                overview: formData.get('overview') as string,
+                introduction: formData.get('introduction') as string,
+                tags: (formData.getAll('tags') as string[]),
+                isGMless: formData.get('isGMless') === 'true',
+                expectedPlayers: parseInt(formData.get('expectedPlayers') as string, 10),
+                expectedPlayTime: formData.get('expectedPlayTime') as string,
+                imageNames: [], // 画像名は後で設定
+                authors: JSON.parse(formData.get('authors') as string),
+            },
+            detail: {
+                description: formData.get('description') as string,
+                contents: formData.get('contents') as string,
+                url: formData.get('url') as string,
+                precaution: formData.get('precaution') as string,
+                prohibition: formData.get('prohibition') as string,
+                termsOfUse: formData.get('termsOfUse') as string,
+                commercialUse: formData.get('commercialUse') as string,
+                updateHistory: JSON.parse(formData.get('updateHistory') as string),
+                videoUrls: JSON.parse(formData.get('videoUrls') as string),
+            },
+            uploadImages: formData.getAll('uploadImages') as File[],
+        };
+
         // トランザクションを開始
         await db.$transaction(async (prisma) => {
-            // 画像のアップロード
-            // try {
-            //     const uploadedImageNames = await Promise.all(files.map(file => uploadImg(file)));
-            //     newScenario.summary.imageNames = uploadedImageNames;
-            // } catch (error) {
-            //     state.error = '画像のアップロードに失敗しました';
-            //     console.error(state.error, error);
-            //     throw error;
-            // }
 
-            // シナリオ概要の作成
-            let scenario;
+            // 画像のアップロード
             try {
-                scenario = await prisma.scenarioSummary.create({
+                const uploadedImageNames = await Promise.all(data.uploadImages.map(file => uploadImg(file)));
+                data.summary.imageNames = uploadedImageNames;
+            } catch (error) {
+                return {
+                    isSuccess: false,
+                    error: {
+                        message: '画像のアップロードに失敗しました'
+                    }
+                }
+            }
+
+
+            try {
+                const scenario = await prisma.scenarioSummary.create({
                     data: {
-                        title: newScenario.summary.title,
-                        overview: newScenario.summary.overview,
-                        introduction: newScenario.summary.introduction,
-                        tags: newScenario.summary.tags,
-                        isGMless: newScenario.summary.isGMless,
-                        expectedPlayers: newScenario.summary.expectedPlayers,
-                        expectedPlayTime: newScenario.summary.expectedPlayTime,
-                        imageNames: newScenario.summary.imageNames,
+                        title: data.summary.title,
+                        overview: data.summary.overview,
+                        introduction: data.summary.introduction,
+                        tags: data.summary.tags,
+                        isGMless: data.summary.isGMless,
+                        expectedPlayers: data.summary.expectedPlayers,
+                        expectedPlayTime: data.summary.expectedPlayTime,
+                        imageNames: data.summary.imageNames,
                         gameSessions: { connect: [] },
                         scenarioDetail: {
                             create: {
-                                description: newScenario.detail?.description ?? '',
-                                contents: newScenario.detail.contents,
-                                url: newScenario.detail.url,
-                                precaution: newScenario.detail.precaution,
-                                prohibition: newScenario.detail.prohibition,
-                                termsOfUse: newScenario.detail.termsOfUse,
-                                commercialUse: newScenario.detail.commercialUse,
+                                description: data.detail?.description ?? '',
+                                contents: data.detail.contents,
+                                url: data.detail.url,
+                                precaution: data.detail.precaution,
+                                prohibition: data.detail.prohibition,
+                                termsOfUse: data.detail.termsOfUse,
+                                commercialUse: data.detail.commercialUse,
                                 updateHistory: {
-                                    create: newScenario.detail.updateHistory.map(history => ({
+                                    create: data.detail.updateHistory?.map(history => ({
                                         date: history.date,
                                         content: history.content,
                                     }))
                                 },
-                                videoUrls: newScenario.detail.videoUrls,
+                                videoUrls: data.detail.videoUrls,
                             }
                         }
                     },
                 });
-            } catch (error) {
-                state.error = 'シナリオ概要の作成に失敗しました';
-                console.error(state.error, error);
-                throw error;
-            }
 
-            // 著者情報を別テーブルに保存
-            try {
-                for (const author of newScenario.summary.authors) {
+                if (!scenario) {
+                    return {
+                        isSuccess: false,
+                        error: {
+                            message: 'シナリオ概要の作成に失敗しました'
+                        }
+                    }
+                }
+
+                // 著者情報を別テーブルに保存
+                for (const author of data.summary.authors) {
                     // Authorの作成
                     const createdAuthor = await prisma.author.create({
                         data: {
@@ -131,21 +111,36 @@ export const createScenario = async ( state: FormState, formData: FormData): Pro
                     // AuthorとScenarioの中間テーブル作成
                     await prisma.authorScenario.create({
                         data: {
-                            author: { connect: { id: createdAuthor.id }},
-                            scenario: { connect: { id: scenario.id }} 
+                            author: { connect: { id: createdAuthor.id } },
+                            scenario: { connect: { id: scenario.id } }
                         }
                     });
                 }
             } catch (error) {
-                state.error = '著者情報の保存に失敗しました';
-                console.error(state.error, error);
-                throw error;
+                return {
+                    isSuccess: false,
+                    error: {
+                        message: '著者情報の保存に失敗しました'
+                    }
+                }
             }
+
+            return {
+                isSuccess: true,
+                message: 'セッションの作成に成功しました',
+                data: {
+                    isOpenSheet: false,
+                },
+            };
 
         });
     } catch (error) {
-        console.error('トランザクション中にエラーが発生しました', error);
-        return state;
+        return {
+            isSuccess: false,
+            error: {
+                message: 'シナリオの作成に失敗しました'
+            }
+        }
     }
 
     redirect('/home/scenario')

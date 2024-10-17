@@ -6,7 +6,7 @@ import Image from 'next/image';
 interface UserIconProps {
     imageName: string;
     altText: string;
-    className?: string; 
+    className?: string;
 }
 
 const fetchImage = async (imageName: string) => {
@@ -32,8 +32,13 @@ const UserIcon: React.FC<UserIconProps> = ({ imageName, altText, className }) =>
         loadImage();
     }, [imageName]);
 
-    return <Image src={imageUrl} alt={altText} className={`rounded-full ${className}`} />;
-};
+    return (
+        <div className={`relative overflow-hidden rounded-full ${className}`}>
+            <Image src={imageUrl} alt={altText} fill style={{ objectFit: 'cover' }} />
+        </div>
+    ) 
+}
+
 
 export default UserIcon;
 
