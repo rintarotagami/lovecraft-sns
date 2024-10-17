@@ -7,6 +7,10 @@ const nextConfig = {
                 hostname: 'storage.googleapis.com',
             },
         ],
+        domains: [
+            'lh3.googleusercontent.com',
+            'storage.googleapis.com'
+        ],
     },
 };
 

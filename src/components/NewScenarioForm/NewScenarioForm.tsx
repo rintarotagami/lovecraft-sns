@@ -1,8 +1,7 @@
 "use client"
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createScenario, FormState } from "@/actions/scenario"
-import { useFormState, useFormStatus } from "react-dom"
+import { createScenario } from "@/actions/scenario"
 import { useState, useCallback } from "react"
 import { motion } from "framer-motion"
 import { FiPlus, FiMinus, FiChevronDown, FiTrash2 } from "react-icons/fi"
@@ -12,12 +11,13 @@ import DraggableImagePreview from './DraggableImagePreview/DraggableImagePreview
 import { uploadScenarioSchema, UploadScenarioSchema } from '@/zod-schemas/scenario';
 import { useForm } from 'react-hook-form';
 import { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField } from '@/components/ui/form';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 
 type OptionalFields = 'introduction' | 'tags' | 'url' | 'precaution' | 'prohibition';
 
-export function NewScenarioForm () {
-    const initialState: FormState = { error: '', messages: {} }
-    const [state, formAction] = useFormState(createScenario, initialState)
+export function NewScenarioForm() {
     const [authors, setAuthors] = useState([{ id: '', role: '', name: '', userId: '', description: '' }])
     const [updateHistory, setUpdateHistory] = useState<{ id: string; date: Date; content: string }[]>([])
     const [videoUrls, setVideoUrls] = useState<string[]>([])
@@ -30,6 +30,8 @@ export function NewScenarioForm () {
     })
     const [imagePreviews, setImagePreviews] = useState<File[]>([])
     const [isGMless, setIsGMless] = useState(false);
+
+    const router = useRouter();
 
     const form = useForm<UploadScenarioSchema>({
         resolver: zodResolver(uploadScenarioSchema),
@@ -48,13 +50,10 @@ export function NewScenarioForm () {
             detail: {
                 description: '',
                 contents: '',
-                url: '',
                 precaution: '',
                 prohibition: '',
                 termsOfUse: '',
                 commercialUse: '',
-                updateHistory: [],
-                videoUrls: [],
             },
             uploadImages: [],
         },
@@ -63,19 +62,31 @@ export function NewScenarioForm () {
 
     const onSubmit = async (data: UploadScenarioSchema) => {
         try {
+            // FormDataオブジェクトを作成
             const formData = new FormData();
-            // フォームデータをFormDataに追加
-            formData.append('data', JSON.stringify(data));
 
-            // 画像ファイルを追加
+            // 画像ファイルをFormDataに追加
             imagePreviews.forEach((file, index) => {
                 formData.append(`uploadImages[${index}]`, file);
             });
 
-            // formActionにFormDataを渡す
-            await formAction(formData);
+            // 他のデータをFormDataに追加
+            formData.append('summary', JSON.stringify(data.summary));
+            formData.append('detail', JSON.stringify(data.detail));
+
+            // createScenario関数を呼び出し
+            const result = await createScenario(formData);
+
+            if (result.isSuccess) {
+                toast.success(result.message);
+                router.push('/home/scenario');
+            } else {
+                toast.error(result.error.message);
+            }
+
         } catch (error) {
-            console.error("エラーが発生しました:", error);
+            console.error(error);
+            toast.error('エラーが発生しました。');
         }
     };
 
@@ -837,16 +848,6 @@ export function NewScenarioForm () {
                         >
                             作成
                         </button>
-                        {state.error && (
-                            <motion.p
-                                className="mt-2 text-sm text-red-500"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {state.error}
-                            </motion.p>
-                        )}
                     </div>
                 </div>
             </form>

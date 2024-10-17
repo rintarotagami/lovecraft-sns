@@ -1,12 +1,11 @@
 import { Storage } from "@google-cloud/storage";
 import { NextRequest, NextResponse } from "next/server";
+import { getGCPCredentials } from '@/lib/gcp';
 
 export const POST = async (req: NextRequest) => {
     try {
-        const storage = new Storage({
-            projectId: process.env.PROJECT_ID,
-            keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-        });
+        const storage = new Storage(getGCPCredentials());
+
         const bucketName = process.env.BUCKET_NAME ?? '';
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(req.nextUrl.searchParams.get('file') ?? '');
