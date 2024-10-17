@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 export const uploadImg = async (file: File) => {
-    const fileName = uuidv4()
+    const fileName = `scenarioImages/${uuidv4()}`
     const res = await fetch(`/api/uploadScenarioImage?file=${fileName}`)
 
     const { url, fields } = await res.json();

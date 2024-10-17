@@ -3,7 +3,7 @@
 import { UploadScenarioSchema } from "@/zod-schemas/scenario"
 import { redirect } from "next/navigation"
 import { db } from "@/lib/db"
-import { uploadImg } from '@/lib/ScenarioImage';
+import { uploadImg } from '@/lib/UploadImage';
 import { ActionsResult } from '@/types/ActionsResult';
 
 export const createScenario = async (
